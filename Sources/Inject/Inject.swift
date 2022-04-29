@@ -28,12 +28,15 @@ public extension InjectListener {
 
 #if DEBUG
 private var loadInjectionImplementation: Void = {
+    guard objc_getClass("InjectionClient") == nil else { return }
 #if os(macOS)
     let bundleName = "macOSInjection.bundle"
 #elseif os(tvOS)
     let bundleName = "tvOSInjection.bundle"
 #elseif targetEnvironment(simulator)
     let bundleName = "iOSInjection.bundle"
+#elseif targetEnvironment(macCatalyst)
+    let bundleName = "macOSInjection.bundle"
 #else
     let bundleName = "maciOSInjection.bundle"
 #endif // OS and environment conditions
