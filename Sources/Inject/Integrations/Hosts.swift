@@ -21,7 +21,7 @@ extension Inject {
 /// `let myView = Inject.ViewControllerHost(TestViewController())`
 /// And within the parent view, you should add the view above.
 @dynamicMemberLookup
-public class _InjectableViewControllerHost<Hosted: InjectViewControllerType>: InjectViewControllerType {
+open class _InjectableViewControllerHost<Hosted: InjectViewControllerType>: InjectViewControllerType {
     public private(set) var instance: Hosted
     let constructor: () -> Hosted
     
@@ -63,6 +63,8 @@ public class _InjectableViewControllerHost<Hosted: InjectViewControllerType>: In
         
         title = instance.title
         tabBarItem = instance.tabBarItem
+        definesPresentationContext = instance.definesPresentationContext
+        modalPresentationStyle = instance.modalPresentationStyle
         #if !os(tvOS)
         navigationItem.title = instance.navigationItem.title
         navigationItem.titleView = instance.navigationItem.titleView
@@ -71,8 +73,10 @@ public class _InjectableViewControllerHost<Hosted: InjectViewControllerType>: In
         navigationItem.leftBarButtonItems = instance.navigationItem.leftBarButtonItems
         navigationItem.rightBarButtonItems = instance.navigationItem.rightBarButtonItems
         navigationItem.largeTitleDisplayMode = instance.navigationItem.largeTitleDisplayMode
+        navigationItem.searchController = instance.navigationItem.searchController
+        navigationItem.hidesSearchBarWhenScrolling = instance.navigationItem.hidesSearchBarWhenScrolling
         toolbarItems = instance.toolbarItems
-        self.hidesBottomBarWhenPushed = instance.hidesBottomBarWhenPushed
+        hidesBottomBarWhenPushed = instance.hidesBottomBarWhenPushed
         #endif
 #endif
         
@@ -87,7 +91,7 @@ public class _InjectableViewControllerHost<Hosted: InjectViewControllerType>: In
     }
     
     @available(*, unavailable)
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
